@@ -18,7 +18,6 @@ function GameObject(gameAttr){
   this.createdAt = gameAttr.createdAt;
   this.dimensions = gameAttr.dimensions;
 }
-
 GameObject.prototype.destroy = function(){
   return "Object was removed from the Game"
 };
@@ -34,8 +33,7 @@ function CharacterStats(charAttr){
   this.name = charAttr.name;
   GameObject.call(this, charAttr);
 }
-CharacterStats.prototype = GameObject.prototype;
-
+CharacterStats.prototype = Object.create(GameObject.prototype);
 CharacterStats.prototype.takeDamage = function(){
   return `${this.name} took damage`
 };
@@ -55,16 +53,43 @@ function Humanoid(humanAttr){
   CharacterStats.call(this, humanAttr);
 
 } 
-Humanoid.prototype = CharacterStats.prototype;
-
+Humanoid.prototype = Object.create(CharacterStats.prototype);
 Humanoid.prototype.greet = function(){
   return `${this.name} offers a greeting in ${this.language}`
 };
+Humanoid.prototype.attack = function(victim, attacker){
+  let newHealthPoints = victim.healthPoints - attacker.damage;
+    if (newHealthPoints > 0)
+      return newHealthPoints;
+    else
+      return victim.destroy();
+}
+Humanoid.prototype.train = function(trainee){
+  let newDamage = trainee.damage * 2;
+      return newDamage;
+}
 /*
   * Inheritance chain: GameObject -> CharacterStats -> Humanoid
   * Instances of Humanoid should have all of the same properties as CharacterStats and GameObject.
   * Instances of CharacterStats should have all of the same properties as GameObject.
 */
+
+function Hero(heroAttr){
+  // this.team = heroAttr.team;
+  // this.weapons = heroAttr.weapons;
+  this.damage = heroAttr.damage;
+  Humanoid.call(this, heroAttr);
+} 
+Hero.prototype = Object.create(Humanoid.prototype);
+
+function Villian(villianAttr){
+  // this.team = villianAttr.team;
+  // this.weapons = villianAttr.weapons;
+  this.damage = villianAttr.damage;
+  Humanoid.call(this, villianAttr);
+} 
+Villian.prototype = Object.create(Humanoid.prototype);
+
 
 // Test you work by un-commenting these 3 objects and the list of console logs below:
 
@@ -85,7 +110,7 @@ Humanoid.prototype.greet = function(){
     language: 'Common Tongue',
   });
 
-  const swordsman = new Humanoid({
+  const swordsman = new Humanoid({                                                            
     createdAt: new Date(),
     dimensions: {
       length: 2,
@@ -119,16 +144,56 @@ Humanoid.prototype.greet = function(){
     language: 'Elvish',
   });
 
-  console.log(mage.createdAt); // Today's date
-  console.log(archer.dimensions); // { length: 1, width: 2, height: 4 }
-  console.log(swordsman.healthPoints); // 15
-  console.log(mage.name); // Bruce
-  console.log(swordsman.team); // The Round Table
-  console.log(mage.weapons); // Staff of Shamalama
-  console.log(archer.language); // Elvish
-  console.log(archer.greet()); // Lilith offers a greeting in Elvish.
-  console.log(mage.takeDamage()); // Bruce took damage.
-  console.log(swordsman.destroy()); // Sir Mustachio was removed from the game.
+  const  Angel = new Hero({
+    createdAt: new Date(),
+    dimensions: {
+      length: .5,
+      width: .5,
+      height: .5,
+    },
+    healthPoints: 12000,
+    name: 'Mike',
+    team: 'The Seven Deadly Sins',
+    weapons: [
+      'K-Bar Tactical knife',
+    ],
+    language: 'All',
+    damage: 1000,
+  });
+
+  const Demon = new Villian({
+    createdAt: new Date(),
+    dimensions: {
+      length: 4,
+      width: 4,
+      height: 10,
+    },
+    healthPoints: 26000,
+    name: 'Boogs',
+    team: 'The Ten Commandments',
+    weapons: [
+      'Spear',
+    ],
+    language: 'All',
+    damage: 1000,
+  });
+  
+  
+  
+  console.log(Angel.attack(Demon, Angel));
+  console.log(Demon.attack(Angel, Demon));
+  console.log(Angel.train(Angel));
+
+  // console.log(mage.createdAt); // Today's date
+  // console.log(archer.dimensions); // { length: 1, width: 2, height: 4 }
+  // console.log(swordsman.healthPoints); // 15
+  // console.log(mage.name); // Bruce
+  // console.log(swordsman.team); // The Round Table
+  // console.log(mage.weapons); // Staff of Shamalama
+  // console.log(archer.language); // Elvish
+  // console.log(archer.greet()); // Lilith offers a greeting in Elvish.
+  // console.log(mage.takeDamage()); // Bruce took damage.
+  // console.log(swordsman.destroy()); // Sir Mustachio was removed from the game.
 
 
   // Stretch task: 
