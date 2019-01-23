@@ -45,7 +45,7 @@ function League (attributes){
         ability: 'poison',
         ult: 'shark',
         attack: function(){
-            return `${character} likes to send his ${ult} to eat people`
+            return `${this.character} likes to send his ${this.ult} to eat people`
         }
     }
     console.log(fizz.attack());
@@ -58,7 +58,7 @@ const Jedi = {
 }
 const skills = ['force','lightsaber', 'mindcontrol'];
 
-function introduce(skills){
-    return `${this.name} has many skills, some of which include using the ${skills}`
+function introduce(skills1,skills2,skills3){
+    return `${this.name} has many skills, some of which include: using the ${skills1}, a ${skills2} and ${skills3}`
 };
-console.log(introduce.call(Jedi, skills));
+console.log(introduce.apply(Jedi, skills));
