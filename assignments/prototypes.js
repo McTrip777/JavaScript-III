@@ -54,20 +54,24 @@ function Humanoid(humanAttr){
 
 } 
 Humanoid.prototype = Object.create(CharacterStats.prototype);
+
 Humanoid.prototype.greet = function(){
   return `${this.name} offers a greeting in ${this.language}`
 };
+Humanoid.prototype.kill = function(){
+  return `${this.name} was removed from the Game`
+};
 Humanoid.prototype.attack = function(victim, attacker){
-  let newHealthPoints = victim.healthPoints - attacker.damage;
-    if (newHealthPoints > 0)
-      return newHealthPoints;
+  victim.healthPoints = victim.healthPoints - attacker.damage;
+    if (victim.healthPoints > 0)
+      return victim.healthPoints;
     else
-      return victim.destroy();
+      return victim.kill();
 }
 Humanoid.prototype.train = function(trainee){
-  let newDamage = trainee.damage * 2;
-      return newDamage;
+      return trainee.damage *= 2;
 }
+
 /*
   * Inheritance chain: GameObject -> CharacterStats -> Humanoid
   * Instances of Humanoid should have all of the same properties as CharacterStats and GameObject.
@@ -144,16 +148,16 @@ Villian.prototype = Object.create(Humanoid.prototype);
     language: 'Elvish',
   });
 
-  const  Angel = new Hero({
+  const  God = new Hero({
     createdAt: new Date(),
     dimensions: {
-      length: .5,
-      width: .5,
-      height: .5,
+      length: 7,
+      width: 7,
+      height: 7,
     },
-    healthPoints: 12000,
+    healthPoints: 77700,
     name: 'Mike',
-    team: 'The Seven Deadly Sins',
+    team: 'Grace',
     weapons: [
       'K-Bar Tactical knife',
     ],
@@ -169,7 +173,7 @@ Villian.prototype = Object.create(Humanoid.prototype);
       height: 10,
     },
     healthPoints: 26000,
-    name: 'Boogs',
+    name: 'Satan',
     team: 'The Ten Commandments',
     weapons: [
       'Spear',
@@ -180,9 +184,21 @@ Villian.prototype = Object.create(Humanoid.prototype);
   
   
   
-  console.log(Angel.attack(Demon, Angel));
-  console.log(Demon.attack(Angel, Demon));
-  console.log(Angel.train(Angel));
+  console.log(God.attack(Demon, God));
+  console.log(God.train(God));
+  console.log(Demon.train(Demon));
+  console.log(Demon.attack(God, Demon));
+  console.log(Demon.train(Demon));
+  console.log(God.train(God));
+  console.log(God.train(God));
+  console.log(God.attack(Demon, God));
+  console.log(God.attack(Demon, God));
+  console.log(Demon.attack(God, Demon));
+  console.log(Demon.attack(God, Demon));
+  console.log(God.attack(Demon, God));
+  console.log(God.attack(Demon, God));
+
+  
 
   // console.log(mage.createdAt); // Today's date
   // console.log(archer.dimensions); // { length: 1, width: 2, height: 4 }
